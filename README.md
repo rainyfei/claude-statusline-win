@@ -13,6 +13,7 @@ A [Claude Code](https://claude.com/claude-code) status line for Windows, written
 - **Pace warnings** — the countdown turns yellow when your usage is 10+ points ahead of the elapsed time in the window, and red when it's 30+ points ahead, so you know you may run out before the reset
 - **Auto wrap** — when the terminal is too narrow the line wraps at section boundaries instead of being cut off with `…`
 - **Fast mode flag** (`⚡fast`) while `/fast` is on, since it spends quota faster
+- **Auto effort tag** (`⟳ Auto`) — optional; only appears if a companion tool writes `%USERPROFILE%\.claude\rainy-console\live\<session_id>.json` with `"auto": true`. Without that file nothing changes
 - Model, effort level, session duration, current folder, git branch and uncommitted-changes marker (`*`)
 - Truecolor in Windows Terminal, with 16-color, ASCII, Nerd Font and Powerline modes
 
@@ -63,7 +64,7 @@ Set these as Windows environment variables, then restart Claude Code.
 
 ## How it works
 
-Claude Code pipes session data as JSON to the script on every update. The script reads the context and rate-limit percentages, computes the reset countdowns from `resets_at`, reads the terminal width from `COLUMNS` to decide where to wrap, and checks git status (cached for 5 seconds in `%TEMP%`). It doesn't send anything over the network or write anything outside that git cache.
+Claude Code pipes session data as JSON to the script on every update. The script reads the context and rate-limit percentages, computes the reset countdowns from `resets_at`, reads the terminal width from `COLUMNS` to decide where to wrap, and checks git status (cached for 5 seconds in `%TEMP%`). If the optional auto-effort file above exists, it reads it too. It doesn't send anything over the network or write anything outside that git cache.
 
 ## Uninstall
 

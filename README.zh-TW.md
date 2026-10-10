@@ -13,6 +13,7 @@
 - **用量速度警示**：用量比時段經過的時間超前 10% 以上，倒數變黃色；超前 30% 以上變紅色，提醒你照這個速度可能撐不到重置
 - **自動換行**：視窗太窄時，會以區塊為單位換到下一行，不會被截成 `…`
 - **Fast mode 標示**：開啟 `/fast` 時顯示 `⚡fast`，因為它消耗額度比較快
+- **自動強度標示**（`⟳ Auto`）：選用功能，只有在其他工具寫入 `%USERPROFILE%\.claude\rainy-console\live\<session_id>.json` 且內容為 `"auto": true` 時才會出現；沒有這個檔案就完全不影響
 - 模型、effort 等級、對話經過時間、目前資料夾、git 分支與未提交標記（`*`）
 - Windows Terminal 下使用全彩，另外支援 16 色、ASCII、Nerd Font、Powerline 模式
 
@@ -63,7 +64,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1
 
 ## 運作方式
 
-Claude Code 每次更新時，會把對話資料以 JSON 傳給腳本。腳本讀取上下文與額度百分比，用 `resets_at` 算出重置倒數，從 `COLUMNS` 讀取終端機寬度決定在哪裡換行，並檢查 git 狀態（在 `%TEMP%` 快取 5 秒）。它不會連網，除了 git 快取以外也不會寫入任何檔案。
+Claude Code 每次更新時，會把對話資料以 JSON 傳給腳本。腳本讀取上下文與額度百分比，用 `resets_at` 算出重置倒數，從 `COLUMNS` 讀取終端機寬度決定在哪裡換行，並檢查 git 狀態（在 `%TEMP%` 快取 5 秒）。如果有上面提到的自動強度檔案，也會讀取它。它不會連網，除了 git 快取以外也不會寫入任何檔案。
 
 ## 解除安裝
 

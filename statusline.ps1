@@ -37,10 +37,10 @@ $PURPLE = if ($useTrue) { "$e[38;2;114;102;234m" } else { "$e[35m" }
 $SKY = if ($useTrue) { "$e[38;2;97;175;239m" } else { "$e[94m" }
 
 if ($useAscii) {
-    $S_BRAND = '<>'; $S_BRANCH = '>'; $S_WARN = '!'; $S_TIME = ''; $S_DIR = ''; $S_FAST = 'fast'
+    $S_BRAND = '<>'; $S_BRANCH = '>'; $S_WARN = '!'; $S_TIME = ''; $S_DIR = ''; $S_FAST = 'fast'; $S_AUTO = 'Auto'
     $SEP = ' | '; $FULL = '#'; $EMPTY = '-'
 } else {
-    $S_BRAND = U 0x25C6; $FULL = U 0x2588; $EMPTY = U 0x2591
+    $S_BRAND = U 0x25C6; $FULL = U 0x2588; $EMPTY = U 0x2591; $S_AUTO = (U 0x27F3) + ' Auto'
     if ($useNerd) {
         $S_BRANCH = (U 0xE0A0) + ' '; $S_WARN = ' ' + (U 0xF0026); $S_TIME = (U 0xF051F) + ' '
         $S_DIR = (U 0xF07B) + ' '; $S_FAST = (U 0xF0E7) + ' fast'
@@ -93,6 +93,17 @@ if (-not $data) { Write-Output "$GRAY$DASH $([char]0x2502) parse error$RST"; exi
 
 $model = if ($data.model.display_name) { $data.model.display_name } else { $DASH }
 $effort = if ($data.effort.level) { $data.effort.level } elseif ($data.effort -is [string]) { $data.effort } else { '' }
+# rainy-console (console panel) auto effort: when on, show the level it picked and an Auto tag
+$autoOn = $false
+if ($data.session_id -and $env:USERPROFILE) {
+    $liveFile = Join-Path $env:USERPROFILE ".claude\rainy-console\live\$($data.session_id).json"
+    if (Test-Path -LiteralPath $liveFile) {
+        try {
+            $live = Get-Content -LiteralPath $liveFile -Raw | ConvertFrom-Json
+            if ($live.auto -eq $true) { $autoOn = $true; if ($live.effort) { $effort = [string]$live.effort } }
+        } catch { }
+    }
+}
 $ctxPct = [math]::Max(0, (Get-Pct $data.context_window.used_percentage))
 $ctxSize = [long]$data.context_window.context_window_size
 $durMs = [long]$data.cost.total_duration_ms
@@ -180,6 +191,7 @@ if ($git -and $cwd -and (Test-Path -LiteralPath $cwd -PathType Container)) {
 
 $head = "$PURPLE$S_BRAND$RST $CYAN$model$RST"
 if ($effort) { $head += " $MAGENTA$effort$RST" }
+if ($autoOn) { $head += " $MAGENTA$S_AUTO$RST" }
 # fast mode spends quota faster, so flag it while it's on
 if ($data.fast_mode -eq $true) { $head += " $YELLOW$S_FAST$RST" }
 $sections = @($head, "$(Get-Bar $ctxPct) $(Get-LevelColor $ctxPct)$ctxPct%$RST$ctxLabel$ctxWarn")
