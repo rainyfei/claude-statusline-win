@@ -205,12 +205,12 @@ if ($cwd) {
 }
 if ($branch) { $sections += "$GRAY$S_BRANCH$branch$RST$RED$dirty$RST" }
 
-# Terminal width: Claude Code passes COLUMNS; the inherited console is a fallback.
-# The smaller valid value wins so a stale number can't cause truncation.
+# Terminal width: Claude Code passes COLUMNS; the console is only a fallback, since the
+# hidden console Claude Code starts us in reports a default width (e.g. 120), not the real one.
 $cols = 0
 foreach ($w in @($env:COLUMNS, $(try { $Host.UI.RawUI.WindowSize.Width } catch { 0 }))) {
     $n = 0
-    if ([int]::TryParse("$w", [ref]$n) -and $n -gt 0 -and ($cols -eq 0 -or $n -lt $cols)) { $cols = $n }
+    if ($cols -eq 0 -and [int]::TryParse("$w", [ref]$n) -and $n -gt 0) { $cols = $n }
 }
 
 # display width: ANSI codes are zero-width, CJK and emoji take two cells
