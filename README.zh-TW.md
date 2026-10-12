@@ -14,6 +14,7 @@
 - **自動換行**：視窗太窄時，會以區塊為單位換到下一行，不會被截成 `…`
 - **Fast mode 標示**：開啟 `/fast` 時顯示 `⚡fast`，因為它消耗額度比較快
 - **自動強度標示**（`⟳ Auto`）：選用功能，只有在其他工具寫入 `%USERPROFILE%\.claude\rainy-console\live\<session_id>.json` 且內容為 `"auto": true` 時才會出現；沒有這個檔案就完全不影響
+- **自動模型標示**（`⇄ Auto`）：選用功能，同一個檔案內容為 `"autoModel": true` 時，模型名稱改顯示這一輪選用的模型（`"model"`），後面加上 `⇄ Auto`
 - 模型、effort 等級、對話經過時間、目前資料夾、git 分支與未提交標記（`*`）
 - Windows Terminal 下使用全彩，另外支援 16 色、ASCII、Nerd Font、Powerline 模式
 
