@@ -29,12 +29,13 @@ Write-Host "Installed $target"
 # --- settings.json -------------------------------------------------------------
 
 $command = 'powershell -NoProfile -ExecutionPolicy Bypass -File "' + ($target -replace '\\', '/') + '"'
-$statusLine = [pscustomobject]@{ type = 'command'; command = $command }
+# refreshInterval: re-run every 2 seconds, so switches flipped elsewhere (e.g. the Auto tags) show without a new message
+$statusLine = [pscustomobject]@{ type = 'command'; command = $command; refreshInterval = 2 }
 
 if (Test-Path $settingsPath) {
     $raw = [IO.File]::ReadAllText($settingsPath)
     try { $settings = $raw | ConvertFrom-Json } catch { throw "settings.json is not valid JSON; fix it and run again" }
-    if ($settings.statusLine.command -eq $command) {
+    if ($settings.statusLine.command -eq $command -and $settings.statusLine.refreshInterval -eq 2) {
         Write-Host "settings.json already points at the script"
         Write-Host "Done. The status line refreshes on your next message."
         exit 0

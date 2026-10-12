@@ -14,7 +14,7 @@ A [Claude Code](https://claude.com/claude-code) status line for Windows, written
 - **Auto wrap** — when the terminal is too narrow the line wraps at section boundaries instead of being cut off with `…`
 - **Fast mode flag** (`⚡fast`) while `/fast` is on, since it spends quota faster
 - **Auto effort tag** (`⟳ Auto`) — optional; only appears if a companion tool writes `%USERPROFILE%\.claude\rainy-console\live\<session_id>.json` with `"auto": true`. Without that file nothing changes
-- **Auto model tag** (`⇄ Auto`) — optional, same file: with `"autoModel": true` the model name shows the model the tool picked for this turn (`"model"`) and a `⇄ Auto` tag follows it
+- **Auto model mark** (`⇄`) — optional, same file: with `"autoModel": true` the model name shows the model the tool picked for this turn (`"model"`), followed by `⇄` in the same colour
 - Model, effort level, session duration, current folder, git branch and uncommitted-changes marker (`*`)
 - Truecolor in Windows Terminal, with 16-color, ASCII, Nerd Font and Powerline modes
 
@@ -47,10 +47,13 @@ Copy `statusline.ps1` to `%USERPROFILE%\.claude\` and add this to `%USERPROFILE%
 {
   "statusLine": {
     "type": "command",
-    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:/Users/<you>/.claude/statusline.ps1\""
+    "command": "powershell -NoProfile -ExecutionPolicy Bypass -File \"C:/Users/<you>/.claude/statusline.ps1\"",
+    "refreshInterval": 2
   }
 }
 ```
+
+`refreshInterval` re-runs the script every 2 seconds, so the Auto tags and the clock update without waiting for your next message. Leave it out to update only on new messages.
 
 ## Options
 

@@ -37,10 +37,10 @@ $PURPLE = if ($useTrue) { "$e[38;2;114;102;234m" } else { "$e[35m" }
 $SKY = if ($useTrue) { "$e[38;2;97;175;239m" } else { "$e[94m" }
 
 if ($useAscii) {
-    $S_BRAND = '<>'; $S_BRANCH = '>'; $S_WARN = '!'; $S_TIME = ''; $S_DIR = ''; $S_FAST = 'fast'; $S_AUTO = 'Auto'; $S_AUTOMODEL = 'Auto'
+    $S_BRAND = '<>'; $S_BRANCH = '>'; $S_WARN = '!'; $S_TIME = ''; $S_DIR = ''; $S_FAST = 'fast'; $S_AUTO = 'Auto'; $S_AUTOMODEL = '<->'
     $SEP = ' | '; $FULL = '#'; $EMPTY = '-'
 } else {
-    $S_BRAND = U 0x25C6; $FULL = U 0x2588; $EMPTY = U 0x2591; $S_AUTO = (U 0x27F3) + ' Auto'; $S_AUTOMODEL = (U 0x21C4) + ' Auto'
+    $S_BRAND = U 0x25C6; $FULL = U 0x2588; $EMPTY = U 0x2591; $S_AUTO = (U 0x27F3) + ' Auto'; $S_AUTOMODEL = U 0x21C4
     if ($useNerd) {
         $S_BRANCH = (U 0xE0A0) + ' '; $S_WARN = ' ' + (U 0xF0026); $S_TIME = (U 0xF051F) + ' '
         $S_DIR = (U 0xF07B) + ' '; $S_FAST = (U 0xF0E7) + ' fast'
@@ -192,7 +192,8 @@ if ($git -and $cwd -and (Test-Path -LiteralPath $cwd -PathType Container)) {
 # --- assemble ----------------------------------------------------------------
 
 $head = "$PURPLE$S_BRAND$RST $CYAN$model$RST"
-if ($autoModelOn) { $head += " $MAGENTA$S_AUTOMODEL$RST" }
+# auto model: just the mark, in the model's colour; one extra space because the mark is two cells wide in many terminals
+if ($autoModelOn) { $head += " $CYAN$S_AUTOMODEL$RST " }
 if ($effort) { $head += " $MAGENTA$effort$RST" }
 if ($autoOn) { $head += " $MAGENTA$S_AUTO$RST" }
 # fast mode spends quota faster, so flag it while it's on
